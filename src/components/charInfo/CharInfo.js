@@ -4,18 +4,16 @@ import './charInfo.scss';
 import PropTypes from 'prop-types';
 /* import thor from '../../resources/img/thor.jpeg'; */
 /* import RandomChar from '../randomChar/RandomChar'; */
-import MarvelService from '../../services/MarvelService';
+import useMarvelService from '../../services/MarvelService';
 import Spinner from '../Spinner/Spinner';
 import ErrorMessage from '../errorMessage/ErrorMessage';
 import Skeleton from '../skeleton/Skeleton';
 
 const CharInfo = (props) => {
     const [char, setChar] = useState(null);
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState(false);
 
 
-    const marvelService = new MarvelService();
+    const {loading, error, getCharacter, clearError} = useMarvelService();
 
     useEffect(() => {
         updateChar()
@@ -26,29 +24,17 @@ const CharInfo = (props) => {
         if (!charId) {
             return;
         }
-        onCharLoading();
-        marvelService.getCharacter(charId)
-                     .then(onCharLoaded)
-                    .catch(onError);
+        clearError();
+        getCharacter(charId)
+        .then(onCharLoaded)
     }
 
     
     const onCharLoaded = (char) => {
         setChar(char);
-        setLoading(false);
     }
 
-    const onCharLoading = () => {
-        setLoading(true)
-    }
-
-    const onError = () => {
-        setLoading(false);
-        setError(true);
-    }
-
-
-    const skeleton = char || loading || error ? null:<Skeleton/>;
+    const skeleton = char || loading || error ? null: <Skeleton/>;
     const errorMessage = error ? <ErrorMessage/> : null;
     const spinner = loading ? <Spinner/> : null;
     const content = !(loading || error || !char) ? <View char={char}/> : null;
@@ -74,38 +60,37 @@ const View = ({char}) => {
     return (
         <>
             <div className="char__basics">
-                    <img src={thumbnail} alt={name} style={imgStyle}/>
-                    <div>
-                        <div className="char__info-name">{name}</div>
-                        <div className="char__btns">
-                            <a href={homepage} className="button button__main">
-                                <div className="inner">homepage</div>
-                            </a>
-                            <a href={wiki} className="button button__secondary">
-                                <div className="inner">Wiki</div>
-                            </a>
-                        </div>
+                <img src={thumbnail} alt={name} style={imgStyle}/>
+                <div>
+                    <div className="char__info-name">{name}</div>
+                    <div className="char__btns">
+                        <a href={homepage} className="button button__main">
+                            <div className="inner">homepage</div>
+                        </a>
+                        <a href={wiki} className="button button__secondary">
+                            <div className="inner">Wiki</div>
+                        </a>
                     </div>
                 </div>
-                <div className="char__descr">
-                  {description}
-                </div>
-                <div className="char__comics">Comics:</div>
-                <ul className="char__comics-list">
-                    {comics.length> 0 ? null: 'There is no comiscs with this characters'}
-                    {
-                        comics.map((item, i) => {
-                            //eslint-disable-next-line
-                            if (i > 9) return;
-                            return(
-                                <li  key={i} className="char__comics-item">
+            </div>
+            <div className="char__descr">
+                {description}
+            </div>
+            <div className="char__comics">Comics:</div>
+            <ul className="char__comics-list">
+                {comics.length > 0 ? null : 'There is no comics with this character'}
+                {
+                    comics.map((item, i) => {
+                        // eslint-disable-next-line
+                        if (i > 9) return;
+                        return (
+                            <li key={i} className="char__comics-item">
                                 {item.name}
-                                </li>
-                            )
-                        })
-                    }
-
-                </ul>
+                            </li>
+                        )
+                    })
+                }                
+            </ul>
         </>
     )
 }
@@ -113,4 +98,5 @@ const View = ({char}) => {
 CharInfo.propTypes = {
     charId: PropTypes.number
 }
+
 export default CharInfo;

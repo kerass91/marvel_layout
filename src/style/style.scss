@@ -284,6 +284,12 @@ main {
 }
 
 .comics {
+    &_back {
+        display: block;
+        justify-content: center;
+        margin-top: 50px;
+        margin-bottom: 50px;
+    }
     &__list {
         margin-top: 45px;
     }

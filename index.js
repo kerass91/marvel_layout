@@ -1,5 +1,5 @@
 import React, {StrictMode} from 'react';
-import ReactDOM from 'react-dom';
+import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import {Button} from './App';
@@ -13,10 +13,13 @@ const BigButton = styled(Button)`
     text-align: center;
 `;
 
-ReactDOM.render(
-  <StrictMode>
-      <App/>
-      <BigButton as="a">Отправить отчет</BigButton>
-  </StrictMode>,
-  document.getElementById('root')
-);
+ReactDOM
+      .createRoot(document.getElementById('root'))
+      .render(
+        <StrictMode>
+        <App/>
+        <BigButton as="a">Отправить отчет</BigButton>
+    </StrictMode>,
+
+      );
+
