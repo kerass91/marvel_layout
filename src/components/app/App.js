@@ -14,6 +14,7 @@ const App = () => {
                     <Route path='/' element={<MainPage/>}/>
                     <Route path='/comics' element={<ComicsPage/>}/>
                     <Route path='/comics/:comicId' element={<SingleComicPage/>}/>
+                   {/*  kay is doesn`t auto` */}
                     <Route path='*' element={<Page404/>}/>
                     </Routes>
                 </main>
